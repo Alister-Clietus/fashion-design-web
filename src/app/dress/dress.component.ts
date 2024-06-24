@@ -1,5 +1,5 @@
-// src/app/dress/dress.component.ts
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { ColorChangeService } from '../service/color-change.service';
 
 @Component({
   selector: 'app-dress',
@@ -10,7 +10,7 @@ export class DressComponent implements OnInit {
 
   private tshirt: HTMLElement;
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+  constructor(private el: ElementRef, private renderer: Renderer2, private colorChangeService: ColorChangeService) {}
 
   ngOnInit(): void {
     this.tshirt = this.el.nativeElement.querySelector('.tshirt');
@@ -19,6 +19,11 @@ export class DressComponent implements OnInit {
     const handles = this.el.nativeElement.querySelectorAll('.resize-handle');
     handles.forEach(handle => {
       this.renderer.listen(handle, 'mousedown', (event) => this.onResizeMouseDown(event, handle));
+    });
+
+    // Subscribe to background color changes
+    this.colorChangeService.backgroundColor$.subscribe(color => {
+      this.changeColor(color);
     });
   }
 

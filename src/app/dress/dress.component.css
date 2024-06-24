@@ -1,7 +1,7 @@
 /* src/app/tshirt/tshirt.component.css */
 .tshirt {
   width: 150px;
-  height: 200px;
+  height: 150px;
   background-color: lightblue;
   position: absolute;
   top: 50px;
@@ -21,7 +21,7 @@
   );
   cursor: move;
   box-sizing: border-box;
-  border: 2px solid #000;
+  /* border: 2px solid #000; */
 }
 
 .resize-handle {
