@@ -5,6 +5,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ColourboxComponent } from './colourbox/colourbox.component';
 import { PhotoUploadComponent } from './photo-upload/photo-upload.component';
 import { ToneSelectorComponent } from './tone-selector/tone-selector.component';
+import { LoginComponent } from './login/login.component';
+import { LandingComponent } from './landing/landing.component';
 
 
 const routes: Routes = [
@@ -23,6 +25,14 @@ const routes: Routes = [
   ,
   {
     path:"tone",component:ToneSelectorComponent
+  }
+  ,
+  {
+    path:"login",component:LoginComponent
+  }
+  ,
+  {
+    path:"landing",component:LandingComponent
   }
 ];
 

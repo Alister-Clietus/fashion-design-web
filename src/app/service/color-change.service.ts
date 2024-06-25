@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ColorChangeService {
-  private backgroundColorSubject = new BehaviorSubject<string>('lightblue');
+  private backgroundColorSubject = new BehaviorSubject<string>('lightgreen');
   backgroundColor$ = this.backgroundColorSubject.asObservable();
 
   updateBackgroundColor(color: string) {

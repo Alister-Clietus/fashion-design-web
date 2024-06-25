@@ -2,10 +2,10 @@
 .tshirt {
   width: 150px;
   height: 150px;
-  background-color: lightblue;
+  background-color: white;
   position: absolute;
-  top: 50px;
-  left: 50px;
+  top: 850px;
+  left: 1250px;
   clip-path: polygon(
     0% 10%, /* left shoulder */
     10% 0%, /* left V-neck */

@@ -8,6 +8,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { PhotoUploadComponent } from './photo-upload/photo-upload.component';
 import { ColourboxComponent } from './colourbox/colourbox.component';
 import { ToneSelectorComponent } from './tone-selector/tone-selector.component';
+import { LoginComponent } from './login/login.component';
+import { LandingComponent } from './landing/landing.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { ToneSelectorComponent } from './tone-selector/tone-selector.component';
     NavbarComponent,
     PhotoUploadComponent,
     ColourboxComponent,
-    ToneSelectorComponent
+    ToneSelectorComponent,
+    LoginComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { ColorChangeService } from '../service/color-change.service';
+import { ReMarginService } from '../service/re-margin.service';
 
 @Component({
   selector: 'app-dress',
@@ -10,7 +11,7 @@ export class DressComponent implements OnInit {
 
   private tshirt: HTMLElement;
 
-  constructor(private el: ElementRef, private renderer: Renderer2, private colorChangeService: ColorChangeService) {}
+  constructor(private el: ElementRef, private renderer: Renderer2, private colorChangeService: ColorChangeService,private remarginservice: ReMarginService) {}
 
   ngOnInit(): void {
     this.tshirt = this.el.nativeElement.querySelector('.tshirt');
@@ -21,14 +22,26 @@ export class DressComponent implements OnInit {
       this.renderer.listen(handle, 'mousedown', (event) => this.onResizeMouseDown(event, handle));
     });
 
+    this.remarginservice.margin$.subscribe(margin => {
+      this.changeMargin(margin.top, margin.left);
+    });
+
     // Subscribe to background color changes
     this.colorChangeService.backgroundColor$.subscribe(color => {
       this.changeColor(color);
     });
+
+        // Subscribe to background color changes
   }
 
   changeColor(color: string): void {
     this.tshirt.style.backgroundColor = color;
+  }
+  
+  changeMargin(top: string,left: string): void {
+    this.tshirt.style.top =top;
+    this.tshirt.style.left = left;
+    console.log("Function is colled")
   }
 
   onMouseDown(event: MouseEvent): void {
