@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ReMarginService } from '../service/re-margin.service';
+import { ReMarginService } from 'src/app/services/re-margin.service';
 
 @Component({
   selector: 'app-photo-upload',
@@ -92,5 +92,6 @@ export class PhotoUploadComponent{
       height: 'auto'
     };
   }
+
 
 }

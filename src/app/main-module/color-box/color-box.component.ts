@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ColorChangeService } from '../service/color-change.service';
+import { ColorChangeService } from 'src/app/services/color-change.service';
 
 @Component({
-  selector: 'app-colourbox',
-  templateUrl: './colourbox.component.html',
-  styleUrls: ['./colourbox.component.css']
+  selector: 'app-color-box',
+  templateUrl: './color-box.component.html',
+  styleUrls: ['./color-box.component.css']
 })
-export class ColourboxComponent implements OnInit {
+export class ColorBoxComponent implements OnInit {
 
   constructor(private colorChangeService: ColorChangeService) {}
 
@@ -15,4 +15,5 @@ export class ColourboxComponent implements OnInit {
   changeColor(color: string): void {
     this.colorChangeService.updateBackgroundColor(color);
   }
+
 }

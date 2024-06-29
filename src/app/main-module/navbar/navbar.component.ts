@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -8,10 +7,10 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
 logout() {
-  this.router.navigate(['/login']);
+throw new Error('Method not implemented.');
 }
 
-  constructor(private router: Router) { }
+  constructor() { }
 
   ngOnInit(): void {
   }

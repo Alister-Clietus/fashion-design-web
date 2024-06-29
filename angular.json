@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "fashionApp": {
+    "frontend-angular": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/fashionApp",
+            "outputPath": "dist/frontend-angular",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -24,8 +24,6 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -64,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "fashionApp:build"
+            "browserTarget": "frontend-angular:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "fashionApp:build:production"
+              "browserTarget": "frontend-angular:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fashionApp:build"
+            "browserTarget": "frontend-angular:build"
           }
         },
         "test": {
@@ -112,19 +110,19 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "fashionApp:serve"
+            "devServerTarget": "frontend-angular:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "fashionApp:serve:production"
+              "devServerTarget": "frontend-angular:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "fashionApp",
+  "defaultProject": "frontend-angular",
   "cli": {
-    "analytics": "b87cf825-2ceb-49ea-b7c0-118db7c3c828"
+    "analytics": "a30d78db-c65c-43f6-8ac3-ea6e82c90398"
   }
 }
