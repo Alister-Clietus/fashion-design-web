@@ -1,9 +1,7 @@
 package com.fashionapp.fashionService.dto;
 
-import jakarta.persistence.Column;
 public class ClientDto 
 {
-
 
     private String clientName;
 
