@@ -8,6 +8,17 @@ public class ClientDto
     private String clientEmail;
 
     private String clientPhoneNumber;
+    
+    private String clientAddress;
+    
+
+	public String getClientAddress() {
+		return clientAddress;
+	}
+
+	public void setClientAddress(String clientAddress) {
+		this.clientAddress = clientAddress;
+	}
 
 	public String getClientName() {
 		return clientName;

@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fashionapp.fashionService.dto.ClientDto;
 import com.fashionapp.fashionService.repository.ClientRepo;
@@ -29,7 +32,7 @@ public class FashionController
 	@PostMapping("/showclientdetails")
 	ResponseEntity<?> showAllClientDetails(@RequestBody ClientDto clientdto)
 	{
-		return new ResponseEntity<>(clientservice.getAllClientDetails(clientdto),HttpStatus.OK);
+		return new ResponseEntity<>(clientservice.getAllClientDetails(),HttpStatus.OK);
 	}
 	
 	@PostMapping("/getclientdetails")
@@ -48,6 +51,20 @@ public class FashionController
 	ResponseEntity<?> updateClientDetails(@RequestBody ClientDto clientdto)
 	{
 		return new ResponseEntity<>(clientservice.updateClientDetails(clientdto),HttpStatus.OK);
+	}
+	@PostMapping("/upload/{email}")
+	ResponseEntity<?> uploadImages(@RequestPart("file") MultipartFile file,@PathVariable("email") String email)
+	{
+		if(file!=null)
+		{
+			return new ResponseEntity<>(clientservice.uploadImage(file, email),HttpStatus.OK);
+		}
+		else
+		{
+			return new ResponseEntity<>("ERROR",HttpStatus.OK);
+
+		}
+		
 	}
 
 }
