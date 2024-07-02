@@ -4,17 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fashionapp.fashionService.dto.ClientDto;
 import com.fashionapp.fashionService.repository.ClientRepo;
 import com.fashionapp.fashionService.service.ClientServiceImp;
 
+@RestController
+@RequestMapping("/api")
 public class FashionController 
 {
 	@Autowired
@@ -29,9 +34,10 @@ public class FashionController
 		return new ResponseEntity<>(clientservice.addClientDetails(clientdto),HttpStatus.OK);
 	}
 	
-	@PostMapping("/showclientdetails")
-	ResponseEntity<?> showAllClientDetails(@RequestBody ClientDto clientdto)
+	@GetMapping("/showclientdetails")
+	ResponseEntity<?> showAllClientDetails()
 	{
+		System.out.println("Hello");
 		return new ResponseEntity<>(clientservice.getAllClientDetails(),HttpStatus.OK);
 	}
 	

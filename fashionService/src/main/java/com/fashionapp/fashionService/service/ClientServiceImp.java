@@ -104,11 +104,6 @@ public class ClientServiceImp implements ClientService
 		return result;
 	}
 
-	@Override
-	public JSONObject getClientDetails(ClientDto clientdto) {
-		
-		return null;
-	}
 	
 	public ResponseEntity<?> uploadImage(MultipartFile file,String email)
 	{
@@ -129,5 +124,11 @@ public class ClientServiceImp implements ClientService
 		{
 	        return new ResponseEntity<>("ERROR", HttpStatus.NOT_FOUND);
 		}
+	}
+
+
+	public JSONObject getClientDetails(ClientDto clientdto) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
