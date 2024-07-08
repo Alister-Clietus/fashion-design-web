@@ -1,16 +1,71 @@
 package com.fashionapp.fashionService.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class ClientDto 
 {
 
+	@NotEmpty
     private String clientName;
 
+	@NotEmpty
+    private String username;
+	
+	@NotEmpty
+    @Email
     private String clientEmail;
 
+    @NotEmpty
     private String clientPhoneNumber;
     
+    @NotEmpty
     private String clientAddress;
     
+//    @NotEmpty
+//    private String Clientcountry;
+    
+    @NotEmpty
+    private String pincode;
+    
+    
+//    public String getClientcountry() {
+//		return Clientcountry;
+//	}
+//
+//	public void setClientcountry(String clientcountry) {
+//		Clientcountry = clientcountry;
+//	}
+
+	public String getPincode() {
+		return pincode;
+	}
+
+	@NotEmpty
+    private String clientGender;
+    
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+    
+	public String getClientGender() {
+		return clientGender;
+	}
+
+	public void setClientGender(String clientGender) {
+		this.clientGender = clientGender;
+	}
+
+
+	public void setPincode(String pincode) {
+		this.pincode = pincode;
+	}
 
 	public String getClientAddress() {
 		return clientAddress;

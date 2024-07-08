@@ -3,6 +3,8 @@ package com.fashionapp.fashionService.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import com.fashionapp.fashionService.repository.ClientRepo;
 @Service
 public class ClientServiceImp implements ClientService
 {
-	
+	private static Logger logger = LogManager.getLogger(ClientServiceImp.class);
 	@Autowired
 	ClientRepo clientrepo;
 
@@ -31,8 +33,11 @@ public class ClientServiceImp implements ClientService
 	        entity.setClientName(clientdto.getClientName());
 	        entity.setClientPhoneNumber(clientdto.getClientPhoneNumber());
 	        clientrepo.save(entity);
+	        logger.info("Clienf Added to the Database");
 	        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
 	    } catch (Exception e) {
+	    	logger.info("Exception Occured in Adding Data to Client");
+	    	logger.error("Error : " + e.getMessage(), e);
 	        return new ResponseEntity<>("Failed to add client details: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
@@ -51,9 +56,11 @@ public class ClientServiceImp implements ClientService
 	        cliententity.setClientPhoneNumber(clientdto.getClientPhoneNumber());
 	        cliententity.setClientName(clientdto.getClientName());
 	        clientrepo.save(cliententity);
-	        
+	        logger.info("Client Data Updated Successfully");
 	        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
 	    } catch (Exception e) {
+	    	logger.info("Exception Occured in Updating Data to Client");
+	    	logger.error("Error : " + e.getMessage(), e);
 	        return new ResponseEntity<>("Failed to update client details: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
@@ -70,6 +77,7 @@ public class ClientServiceImp implements ClientService
 	        clientrepo.deleteById(cliententity.getClientId());
 	        return new ResponseEntity<>("DELETED", HttpStatus.OK);
 	    } catch (Exception e) {
+	    	logger.error("Error : " + e.getMessage(), e);
 	        return new ResponseEntity<>("Failed to delete client details: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
@@ -99,7 +107,7 @@ public class ClientServiceImp implements ClientService
 //			result.put("iTotalRecords", repo.findAll(spec).size());
 //			result.put("countByStatus", countByStatus);
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error("Error : " + e.getMessage(), e);
 		}
 		return result;
 	}

@@ -18,6 +18,8 @@ import com.fashionapp.fashionService.dto.ClientDto;
 import com.fashionapp.fashionService.repository.ClientRepo;
 import com.fashionapp.fashionService.service.ClientServiceImp;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api")
 public class FashionController 
@@ -29,8 +31,9 @@ public class FashionController
 	ClientServiceImp clientservice;
 	
 	@PostMapping("/addclientdetails")
-	ResponseEntity<?> addClientDetails(@RequestBody ClientDto clientdto)
+	ResponseEntity<?> addClientDetails(@Valid @RequestBody ClientDto clientdto)
 	{
+		System.out.println(clientdto);
 		return new ResponseEntity<>(clientservice.addClientDetails(clientdto),HttpStatus.OK);
 	}
 	
