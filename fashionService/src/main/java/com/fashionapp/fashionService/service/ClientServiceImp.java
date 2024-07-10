@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fashionapp.fashionService.dto.ClientDto;
+import com.fashionapp.fashionService.dto.ClientIddto;
 import com.fashionapp.fashionService.entity.ClientEntity;
 import com.fashionapp.fashionService.repository.ClientRepo;
 
@@ -66,7 +67,7 @@ public class ClientServiceImp implements ClientService
 	}
 
 
-	public ResponseEntity<?> deleteClientDetails(ClientDto clientdto) {
+	public ResponseEntity<?> deleteClientDetails(ClientIddto clientdto) {
 	    try {
 	        ClientEntity cliententity = clientrepo.findByClientEmail(clientdto.getClientEmail());
 	        
@@ -117,6 +118,7 @@ public class ClientServiceImp implements ClientService
 	{
 		try
 		{
+			System.out.println(email);
 			Optional<ClientEntity> profile = Optional.ofNullable(clientrepo.findByClientEmail(email));
 		    if (profile.isPresent()) {
 		    	ClientEntity entity=profile.get();
@@ -135,8 +137,27 @@ public class ClientServiceImp implements ClientService
 	}
 
 
-	public JSONObject getClientDetails(ClientDto clientdto) {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONObject getClientDetails(ClientIddto clientdto) 
+	{
+		JSONObject result = new JSONObject();
+		JSONObject obj = new JSONObject();
+		ClientEntity cliententity = clientrepo.findByClientEmail(clientdto.getClientEmail());
+		if (cliententity == null) {
+			obj.put("STATUS", "FAILED");
+			return obj;
+        }
+		obj.put("STATUS", "SUCCESS");
+		obj.put("ID", cliententity.getClientId());
+		obj.put("USERNAME", cliententity.getClientName());
+		obj.put("NAME", cliententity.getClientName());
+		obj.put("EMAIL", cliententity.getClientEmail());
+		obj.put("PHONENUMBER", cliententity.getClientPhoneNumber());
+		obj.put("ADDRESS", cliententity.getClientAddress());
+		obj.put("PINCODE", cliententity.getClientPhoneNumber());
+		obj.put("GENDER", "NULL");
+		obj.put("IMAGE", cliententity.getClientPhoto());
+
+		result.put("aaData", obj);
+		return result;
 	}
 }

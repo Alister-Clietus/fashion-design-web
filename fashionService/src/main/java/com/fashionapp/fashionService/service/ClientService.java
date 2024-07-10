@@ -5,14 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fashionapp.fashionService.dto.ClientDto;
+import com.fashionapp.fashionService.dto.ClientIddto;
 
 public interface ClientService 
 {
 	ResponseEntity<?> addClientDetails(ClientDto clientdto);
 	ResponseEntity<?> updateClientDetails(ClientDto clientdto);
-	ResponseEntity<?> deleteClientDetails(ClientDto clientdto);
+	ResponseEntity<?> deleteClientDetails(ClientIddto clientdto);
 	JSONObject getAllClientDetails();
-	JSONObject getClientDetails(ClientDto clientdto);
+	JSONObject getClientDetails(ClientIddto clientdto);
 	ResponseEntity<?> uploadImage(MultipartFile file,String email);
 
 }

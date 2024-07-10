@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fashionapp.fashionService.dto.ClientDto;
+import com.fashionapp.fashionService.dto.ClientIddto;
 import com.fashionapp.fashionService.repository.ClientRepo;
 import com.fashionapp.fashionService.service.ClientServiceImp;
 
@@ -45,18 +46,18 @@ public class FashionController
 	}
 	
 	@PostMapping("/getclientdetails")
-	ResponseEntity<?> showClientDetails(@RequestBody ClientDto clientdto)
+	ResponseEntity<?> showClientDetails(@RequestBody ClientIddto clientdto)
 	{
 		return new ResponseEntity<>(clientservice.getClientDetails(clientdto),HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/deleteclientdetails")
-	ResponseEntity<?> deleteClientDetails(@RequestBody ClientDto clientdto)
+	@PostMapping("/deleteclientdetails")
+	ResponseEntity<?> deleteClientDetails(@RequestBody ClientIddto clientdto)
 	{
 		return new ResponseEntity<>(clientservice.deleteClientDetails(clientdto),HttpStatus.OK);
 	}
 	
-	@PutMapping("/editclientdetails")
+	@PostMapping("/editclientdetails")
 	ResponseEntity<?> updateClientDetails(@RequestBody ClientDto clientdto)
 	{
 		return new ResponseEntity<>(clientservice.updateClientDetails(clientdto),HttpStatus.OK);
@@ -64,12 +65,15 @@ public class FashionController
 	@PostMapping("/upload/{email}")
 	ResponseEntity<?> uploadImages(@RequestPart("file") MultipartFile file,@PathVariable("email") String email)
 	{
+		
 		if(file!=null)
 		{
+			System.out.println("File Present");
 			return new ResponseEntity<>(clientservice.uploadImage(file, email),HttpStatus.OK);
 		}
 		else
 		{
+			System.out.println("File Not Present");
 			return new ResponseEntity<>("ERROR",HttpStatus.OK);
 
 		}
