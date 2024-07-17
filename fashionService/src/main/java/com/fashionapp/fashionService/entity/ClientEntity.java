@@ -26,7 +26,19 @@ public class ClientEntity
     @Column(name = "client_phone_number")
     private String clientPhoneNumber;
     
-    @Lob // Use @Lob annotation for large objects like images
+    @Column(name = "gender")
+    private String gender;
+    
+    
+    public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	@Lob // Use @Lob annotation for large objects like images
     @Column(name="client_photo", columnDefinition="LONGBLOB")
     private byte[] clientPhoto;
     
@@ -45,8 +57,56 @@ public class ClientEntity
     @Lob // Use @Lob annotation for large objects like images
     @Column(name="client_photo_flag4", columnDefinition="LONGBLOB")
     private byte[] clientPhotoFlag4;
+    
+    @Lob // Use @Lob annotation for large objects like images
+    @Column(name="client_photo_flag5", columnDefinition="LONGBLOB")
+    private byte[] clientPhotoFlag5;
+    
+    @Lob // Use @Lob annotation for large objects like images
+    @Column(name="client_photo_flag6", columnDefinition="LONGBLOB")
+    private byte[] clientPhotoFlag6;
+    
+    @Lob // Use @Lob annotation for large objects like images
+    @Column(name="client_photo_flag7", columnDefinition="LONGBLOB")
+    private byte[] clientPhotoFlag7;
+    
+    @Lob // Use @Lob annotation for large objects like images
+    @Column(name="client_photo_flag8", columnDefinition="LONGBLOB")
+    private byte[] clientPhotoFlag8;
 
-    @Column(name = "client_address")
+    public byte[] getClientPhotoFlag5() {
+		return clientPhotoFlag5;
+	}
+
+	public void setClientPhotoFlag5(byte[] clientPhotoFlag5) {
+		this.clientPhotoFlag5 = clientPhotoFlag5;
+	}
+
+	public byte[] getClientPhotoFlag6() {
+		return clientPhotoFlag6;
+	}
+
+	public void setClientPhotoFlag6(byte[] clientPhotoFlag6) {
+		this.clientPhotoFlag6 = clientPhotoFlag6;
+	}
+
+	public byte[] getClientPhotoFlag7() {
+		return clientPhotoFlag7;
+	}
+
+	public void setClientPhotoFlag7(byte[] clientPhotoFlag7) {
+		this.clientPhotoFlag7 = clientPhotoFlag7;
+	}
+
+	public byte[] getClientPhotoFlag8() {
+		return clientPhotoFlag8;
+	}
+
+	public void setClientPhotoFlag8(byte[] clientPhotoFlag8) {
+		this.clientPhotoFlag8 = clientPhotoFlag8;
+	}
+
+	@Column(name = "client_address")
     private String clientAddress;
 
 	public Long getClientId() {

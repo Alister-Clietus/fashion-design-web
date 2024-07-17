@@ -34,6 +34,7 @@ public class FashionController
 	@PostMapping("/addclientdetails")
 	ResponseEntity<?> addClientDetails(@Valid @RequestBody ClientDto clientdto)
 	{
+		System.out.println(clientdto.getClientGender());
 		System.out.println(clientdto);
 		return new ResponseEntity<>(clientservice.addClientDetails(clientdto),HttpStatus.OK);
 	}
@@ -51,6 +52,12 @@ public class FashionController
 		return new ResponseEntity<>(clientservice.getClientDetails(clientdto),HttpStatus.OK);
 	}
 	
+	@PostMapping("/getclientphotos")
+	ResponseEntity<?> showClientPhotos(@RequestBody ClientIddto clientdto)
+	{
+		return new ResponseEntity<>(clientservice.getClientPhotos(clientdto),HttpStatus.OK);
+	}
+	
 	@PostMapping("/deleteclientdetails")
 	ResponseEntity<?> deleteClientDetails(@RequestBody ClientIddto clientdto)
 	{
@@ -60,8 +67,28 @@ public class FashionController
 	@PostMapping("/editclientdetails")
 	ResponseEntity<?> updateClientDetails(@RequestBody ClientDto clientdto)
 	{
+		System.out.println(clientdto.getClientGender());
 		return new ResponseEntity<>(clientservice.updateClientDetails(clientdto),HttpStatus.OK);
 	}
+	
+	@PostMapping("/upload/flag/{email}/{rgb}")
+	ResponseEntity<?> uploadFlagImages(@RequestPart("file") MultipartFile file,@PathVariable("email") String email,@PathVariable("rgb") String rgb)
+	{
+		
+		if(file!=null)
+		{
+			System.out.println("File Present in flag function");
+			return new ResponseEntity<>(clientservice.uploadFlagImage(file, email,rgb),HttpStatus.OK);
+		}
+		else
+		{
+			System.out.println("File Not Present");
+			return new ResponseEntity<>("ERROR",HttpStatus.OK);
+
+		}
+		
+	}
+	
 	@PostMapping("/upload/{email}")
 	ResponseEntity<?> uploadImages(@RequestPart("file") MultipartFile file,@PathVariable("email") String email)
 	{

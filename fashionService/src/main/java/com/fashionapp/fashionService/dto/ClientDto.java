@@ -23,20 +23,11 @@ public class ClientDto
     @NotEmpty
     private String clientAddress;
     
-//    @NotEmpty
-//    private String Clientcountry;
     
     @NotEmpty
     private String pincode;
     
-    
-//    public String getClientcountry() {
-//		return Clientcountry;
-//	}
-//
-//	public void setClientcountry(String clientcountry) {
-//		Clientcountry = clientcountry;
-//	}
+
 
 	public String getPincode() {
 		return pincode;

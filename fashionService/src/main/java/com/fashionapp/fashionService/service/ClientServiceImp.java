@@ -33,6 +33,7 @@ public class ClientServiceImp implements ClientService
 	        entity.setClientEmail(clientdto.getClientEmail());
 	        entity.setClientName(clientdto.getClientName());
 	        entity.setClientPhoneNumber(clientdto.getClientPhoneNumber());
+	        entity.setGender(clientdto.getClientGender());
 	        clientrepo.save(entity);
 	        logger.info("Clienf Added to the Database");
 	        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
@@ -56,6 +57,7 @@ public class ClientServiceImp implements ClientService
 	        cliententity.setClientEmail(clientdto.getClientEmail());
 	        cliententity.setClientPhoneNumber(clientdto.getClientPhoneNumber());
 	        cliententity.setClientName(clientdto.getClientName());
+	        cliententity.setGender(clientdto.getClientGender());
 	        clientrepo.save(cliententity);
 	        logger.info("Client Data Updated Successfully");
 	        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
@@ -154,9 +156,97 @@ public class ClientServiceImp implements ClientService
 		obj.put("PHONENUMBER", cliententity.getClientPhoneNumber());
 		obj.put("ADDRESS", cliententity.getClientAddress());
 		obj.put("PINCODE", cliententity.getClientPhoneNumber());
-		obj.put("GENDER", "NULL");
+		obj.put("GENDER", cliententity.getGender());
 		obj.put("IMAGE", cliententity.getClientPhoto());
 
+		result.put("aaData", obj);
+		return result;
+	}
+	
+	public ResponseEntity<?> uploadFlagImage(MultipartFile file,String email,String rgb)
+	{
+		try
+		{
+			Optional<ClientEntity> profile = Optional.ofNullable(clientrepo.findByClientEmail(email));
+		    if (profile.isPresent()) {
+		    	ClientEntity entity=profile.get();
+		    	byte[] imageBytes = file.getBytes();
+		    	if(rgb.equals("red1"))
+		    	{
+			    	entity.setClientPhotoFlag1(imageBytes);
+			    	clientrepo.save(entity);
+			    	return new ResponseEntity<>("OK", HttpStatus.OK);
+		    	}
+		    	else if(rgb.equals("red2"))
+		    	{
+			    	entity.setClientPhotoFlag2(imageBytes);
+			    	clientrepo.save(entity);
+			    	return new ResponseEntity<>("OK", HttpStatus.OK);
+		    	}
+		    	else if(rgb.equals("red3"))
+		    	{
+			    	entity.setClientPhotoFlag3(imageBytes);
+			    	clientrepo.save(entity);
+			    	return new ResponseEntity<>("OK", HttpStatus.OK);
+		    	}
+		    	else if(rgb.equals("red4"))
+		    	{
+			    	entity.setClientPhotoFlag4(imageBytes);
+			    	clientrepo.save(entity);
+			    	return new ResponseEntity<>("OK", HttpStatus.OK);
+		    	}
+		    	else if(rgb.equals("silver"))
+		    	{
+			    	entity.setClientPhotoFlag5(imageBytes);
+			    	clientrepo.save(entity);
+			    	return new ResponseEntity<>("OK", HttpStatus.OK);
+		    	}
+		    	else if(rgb.equals("gold"))
+		    	{
+			    	entity.setClientPhotoFlag6(imageBytes);
+			    	clientrepo.save(entity);
+			    	return new ResponseEntity<>("OK", HttpStatus.OK);
+		    	}
+		    	else
+		    	{
+			    	entity.setClientPhotoFlag7(imageBytes);
+			    	clientrepo.save(entity);
+			    	return new ResponseEntity<>("OK", HttpStatus.OK);
+		    	}
+		        
+		    } 
+		    else 
+		    {
+		        return new ResponseEntity<>("ERROR: Person not found", HttpStatus.NOT_FOUND);
+		    }
+		}
+		catch(Exception e)
+		{
+	        return new ResponseEntity<>("ERROR", HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	public JSONObject getClientPhotos(ClientIddto clientdto)
+	{
+		System.out.println();
+		JSONObject result = new JSONObject();
+		JSONObject obj = new JSONObject();
+		ClientEntity cliententity = clientrepo.findByClientEmail(clientdto.getClientEmail());
+		if (cliententity == null) {
+			obj.put("STATUS", "FAILED");
+			return obj;
+        }
+		obj.put("STATUS", "SUCCESS");
+		obj.put("ID", cliententity.getClientId());
+		obj.put("USERNAME", cliententity.getClientName());
+		obj.put("PHOTO1", cliententity.getClientPhotoFlag1());
+		obj.put("PHOTO2", cliententity.getClientPhotoFlag2());
+		obj.put("PHOTO3", cliententity.getClientPhotoFlag3());
+		obj.put("PHOTO4", cliententity.getClientPhotoFlag4());
+		obj.put("PHOTO5", cliententity.getClientPhotoFlag5());
+		obj.put("PHOTO6", cliententity.getClientPhotoFlag6());
+		obj.put("PHOTO7", cliententity.getClientPhotoFlag7());
+		obj.put("PHOTO8", cliententity.getClientPhotoFlag8());
 		result.put("aaData", obj);
 		return result;
 	}
