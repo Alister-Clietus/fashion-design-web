@@ -1,7 +1,12 @@
 package com.fashionapp.fashionService.controller;
 
+import java.io.IOException;
+
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +24,7 @@ import com.fashionapp.fashionService.dto.ClientDto;
 import com.fashionapp.fashionService.dto.ClientIddto;
 import com.fashionapp.fashionService.repository.ClientRepo;
 import com.fashionapp.fashionService.service.ClientServiceImp;
+import com.itextpdf.text.DocumentException;
 
 import jakarta.validation.Valid;
 
@@ -44,6 +51,15 @@ public class FashionController
 	{
 		System.out.println("Hello");
 		return new ResponseEntity<>(clientservice.getAllClientDetails(),HttpStatus.OK);
+	}
+	
+	@GetMapping("/search")
+	ResponseEntity<?> searchDetails(@RequestParam("searchParam") String searchParam, @RequestParam("iDisplayStart") String iDisplayStart,
+			@RequestParam("iDisplayLength") String iDisplayLength)
+	{
+		JSONObject list = clientservice.searchfor(searchParam, Integer.parseInt(iDisplayStart),
+				Integer.parseInt(iDisplayLength));
+		return new ResponseEntity(list,HttpStatus.OK);
 	}
 	
 	@PostMapping("/getclientdetails")
@@ -105,6 +121,25 @@ public class FashionController
 
 		}
 		
+	}
+	
+	@PostMapping("/generatepdf")
+	ResponseEntity<?> generatePDFClientDetails(@RequestBody ClientIddto clientdto)
+	{
+        byte[] pdfBytes;
+        try {
+            pdfBytes = clientservice.generatePDFClientDetails(clientdto);
+        } catch (DocumentException | IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=client-details.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
 	}
 
 }

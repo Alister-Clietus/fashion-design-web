@@ -1,5 +1,7 @@
 package com.fashionapp.fashionService.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,15 +10,34 @@ import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.fashionapp.fashionService.dto.ClientDto;
 import com.fashionapp.fashionService.dto.ClientIddto;
 import com.fashionapp.fashionService.entity.ClientEntity;
 import com.fashionapp.fashionService.repository.ClientRepo;
+import com.fashionapp.fashionService.repository.specifications.SecurityUserSpec;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
 public class ClientServiceImp implements ClientService
@@ -250,4 +271,150 @@ public class ClientServiceImp implements ClientService
 		result.put("aaData", obj);
 		return result;
 	}
+	
+	public JSONObject searchfor(String searchParam,int start, int pageSize) 
+	{
+		JSONObject result = new JSONObject();
+		try {
+			PageRequest pageable = PageRequest.of(start / pageSize, pageSize);
+			Specification<ClientEntity> spec = SecurityUserSpec.getUserSpec(searchParam);
+			Page<ClientEntity> usersList = clientrepo.findAll(spec,pageable);
+			JSONArray array = new JSONArray();
+//			JSONArray countByStatus = countByStatus(spec);
+			for (ClientEntity users : usersList) {
+				JSONObject obj = new JSONObject();
+				obj.put("ID", users.getClientId());
+				obj.put("NAME", users.getClientName());
+				obj.put("EMAIL", users.getClientEmail());
+				obj.put("PHONENUMBER", users.getClientPhoneNumber());
+				obj.put("ADDRESS", users.getClientAddress());
+				array.add(obj);
+			}
+			result.put("aaData", array);
+			result.put("iTotalDisplayRecords", clientrepo.findAll().size());
+			result.put("iTotalRecords", clientrepo.findAll(spec).size());
+			result.put("countByStatus", 22);
+		} catch (Exception e) {
+			logger.error("Error:" + e.getMessage(), e);
+		}
+		return result;
+	}
+	
+	public byte[] generatePDFClientDetails(ClientIddto clientdto) throws DocumentException, IOException {
+	    try {
+	        ClientEntity client = clientrepo.findByClientEmail(clientdto.getClientEmail());
+	        if (client == null) {
+	            return null;
+	        }
+
+	        ByteArrayOutputStream out = new ByteArrayOutputStream();
+	        Document document = new Document(PageSize.A4, 50, 50, 50, 50);
+	        PdfWriter.getInstance(document, out);
+	        document.open();
+
+	        // Adding title
+	        Font titleFont = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, BaseColor.BLUE);
+	        Paragraph title = new Paragraph("Client Details", titleFont);
+	        title.setAlignment(Element.ALIGN_CENTER);
+	        document.add(title);
+	        document.add(Chunk.NEWLINE);
+
+	        // Adding client details in a table
+	        PdfPTable table = new PdfPTable(2);
+	        table.setWidthPercentage(100);
+	        table.setSpacingBefore(10f);
+	        table.setSpacingAfter(10f);
+
+	        Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+	        PdfPCell header;
+	        
+	        header = new PdfPCell(new Phrase("Field", headerFont));
+	        header.setBackgroundColor(BaseColor.GRAY);
+	        table.addCell(header);
+	        
+	        header = new PdfPCell(new Phrase("Details", headerFont));
+	        header.setBackgroundColor(BaseColor.GRAY);
+	        table.addCell(header);
+
+	        // Adding client details
+	        addClientDetail(table, "Client ID:", client.getClientId().toString());
+	        addClientDetail(table, "Client Name:", client.getClientName());
+	        addClientDetail(table, "Phone Number:", client.getClientPhoneNumber());
+	        addClientDetail(table, "Gender:", client.getGender());
+	        addClientDetail(table, "Address:", client.getClientAddress());
+
+	        document.add(table);
+
+	        // Adding client profile photo
+	        Paragraph profilePhotoTitle = new Paragraph("Client Profile Photo", titleFont);
+	        profilePhotoTitle.setSpacingBefore(20f);
+	        profilePhotoTitle.setSpacingAfter(10f);
+	        document.add(profilePhotoTitle);
+
+	        PdfPTable profilePhotoTable = new PdfPTable(1);
+	        profilePhotoTable.setWidthPercentage(100);
+	        profilePhotoTable.setSpacingBefore(10f);
+	        profilePhotoTable.setSpacingAfter(10f);
+
+	        addImageToTable(profilePhotoTable, client.getClientPhoto());
+	        document.add(profilePhotoTable);
+
+	        // Adding flagged photos
+	        Paragraph flaggedPhotosTitle = new Paragraph("Flagged Photos", titleFont);
+	        flaggedPhotosTitle.setSpacingBefore(20f);
+	        flaggedPhotosTitle.setSpacingAfter(10f);
+	        document.add(flaggedPhotosTitle);
+
+	        PdfPTable flaggedPhotosTable = new PdfPTable(3);
+	        flaggedPhotosTable.setWidthPercentage(100);
+	        flaggedPhotosTable.setSpacingBefore(10f);
+	        flaggedPhotosTable.setSpacingAfter(10f);
+
+	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag1());
+	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag3());
+	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag4());
+	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag5());
+	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag6());
+	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag7());
+
+	        document.add(flaggedPhotosTable);
+
+	        document.close();
+	        return out.toByteArray();
+	    } catch (Exception e) {
+	        logger.error("Error : " + e.getMessage(), e);
+	        return null;
+	    }
+	}
+
+	private void addClientDetail(PdfPTable table, String field, String value) {
+	    PdfPCell cell;
+
+	    cell = new PdfPCell(new Phrase(field));
+	    table.addCell(cell);
+
+	    cell = new PdfPCell(new Phrase(value));
+	    table.addCell(cell);
+	}
+
+	private void addImageToTable(PdfPTable table, byte[] imageBytes) throws DocumentException, IOException {
+	    if (imageBytes != null) {
+	        Image image = Image.getInstance(imageBytes);
+	        image.scaleToFit(150, 150);
+	        PdfPCell cell = new PdfPCell(image);
+	        cell.setBorder(Rectangle.NO_BORDER);
+	        cell.setPadding(10);
+	        table.addCell(cell);
+	    } else {
+	        PdfPCell cell = new PdfPCell();
+	        cell.setBorder(Rectangle.NO_BORDER);
+	        cell.setPadding(10);
+	        table.addCell(cell);
+	    }
+	}
+
+
+
+	
+	
 }
