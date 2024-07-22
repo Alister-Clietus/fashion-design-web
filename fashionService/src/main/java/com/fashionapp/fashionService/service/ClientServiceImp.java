@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fashionapp.fashionService.dto.ClientDto;
 import com.fashionapp.fashionService.dto.ClientIddto;
+import com.fashionapp.fashionService.dto.ClientNoteDTO;
 import com.fashionapp.fashionService.entity.ClientEntity;
 import com.fashionapp.fashionService.repository.ClientRepo;
 import com.fashionapp.fashionService.repository.specifications.SecurityUserSpec;
@@ -49,6 +50,15 @@ public class ClientServiceImp implements ClientService
 
 	public ResponseEntity<?> addClientDetails(ClientDto clientdto) {
 	    try {
+	        // Check if a client with the same email address already exists
+	        Optional<ClientEntity> existingClient = Optional.ofNullable(clientrepo.findByClientEmail(clientdto.getClientEmail()));
+	        if (existingClient.isPresent()) {
+	            // Client with the same email already exists
+	            logger.info("Client with the email address already exists.");
+	            return new ResponseEntity<>("Failed to add client details: Client with this email already exists.", HttpStatus.CONFLICT);
+	        }
+
+	        // Proceed to add new client
 	        ClientEntity entity = new ClientEntity();
 	        entity.setClientAddress(clientdto.getClientAddress());
 	        entity.setClientEmail(clientdto.getClientEmail());
@@ -56,14 +66,16 @@ public class ClientServiceImp implements ClientService
 	        entity.setClientPhoneNumber(clientdto.getClientPhoneNumber());
 	        entity.setGender(clientdto.getClientGender());
 	        clientrepo.save(entity);
-	        logger.info("Clienf Added to the Database");
+
+	        logger.info("Client Added to the Database");
 	        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
 	    } catch (Exception e) {
-	    	logger.info("Exception Occured in Adding Data to Client");
-	    	logger.error("Error : " + e.getMessage(), e);
+	        logger.info("Exception Occurred in Adding Data to Client");
+	        logger.error("Error: " + e.getMessage(), e);
 	        return new ResponseEntity<>("Failed to add client details: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
+
 
 
 	public ResponseEntity<?> updateClientDetails(ClientDto clientdto) {
@@ -410,6 +422,25 @@ public class ClientServiceImp implements ClientService
 	        cell.setBorder(Rectangle.NO_BORDER);
 	        cell.setPadding(10);
 	        table.addCell(cell);
+	    }
+	}
+	
+	public ResponseEntity<?> addClientNotes(ClientNoteDTO clientnote)
+	{
+	    try {
+	        ClientEntity cliententity = clientrepo.findByClientEmail(clientnote.getClientEmail());
+	        
+	        if (cliententity == null) {
+	            return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
+	        }
+	        cliententity.setClientNote(clientnote.getClientNote());
+	        clientrepo.save(cliententity);
+	        logger.info("Client Note Uploaded Successfully");
+	        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+	    } catch (Exception e) {
+	    	logger.info("Exception Occured in Updating Data to Client");
+	    	logger.error("Error : " + e.getMessage(), e);
+	        return new ResponseEntity<>("Failed to update client details: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
 

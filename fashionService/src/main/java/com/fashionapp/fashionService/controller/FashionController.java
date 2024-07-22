@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fashionapp.fashionService.dto.ClientDto;
 import com.fashionapp.fashionService.dto.ClientIddto;
+import com.fashionapp.fashionService.dto.ClientNoteDTO;
 import com.fashionapp.fashionService.repository.ClientRepo;
 import com.fashionapp.fashionService.service.ClientServiceImp;
 import com.itextpdf.text.DocumentException;
@@ -41,15 +42,14 @@ public class FashionController
 	@PostMapping("/addclientdetails")
 	ResponseEntity<?> addClientDetails(@Valid @RequestBody ClientDto clientdto)
 	{
-		System.out.println(clientdto.getClientGender());
-		System.out.println(clientdto);
+
 		return new ResponseEntity<>(clientservice.addClientDetails(clientdto),HttpStatus.OK);
 	}
 	
 	@GetMapping("/showclientdetails")
 	ResponseEntity<?> showAllClientDetails()
 	{
-		System.out.println("Hello");
+
 		return new ResponseEntity<>(clientservice.getAllClientDetails(),HttpStatus.OK);
 	}
 	
@@ -140,6 +140,12 @@ public class FashionController
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfBytes);
+	}
+	
+	@PostMapping("/addnote")
+	ResponseEntity<?> addClientNotes(@RequestBody ClientNoteDTO clientnote)
+	{
+		return new ResponseEntity<>(clientservice.addClientNotes(clientnote),HttpStatus.OK);
 	}
 
 }

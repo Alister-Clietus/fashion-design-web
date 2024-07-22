@@ -26,11 +26,24 @@ public class ClientEntity
     @Column(name = "client_phone_number")
     private String clientPhoneNumber;
     
+    @Column(name = "client_note")
+    private String clientNote;
+    
     @Column(name = "gender")
     private String gender;
     
     
-    public String getGender() {
+    
+    
+    public String getClientNote() {
+		return clientNote;
+	}
+
+	public void setClientNote(String clientNote) {
+		this.clientNote = clientNote;
+	}
+
+	public String getGender() {
 		return gender;
 	}
 

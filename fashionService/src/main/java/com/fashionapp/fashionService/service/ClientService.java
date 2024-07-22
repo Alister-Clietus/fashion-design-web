@@ -8,11 +8,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fashionapp.fashionService.dto.ClientDto;
 import com.fashionapp.fashionService.dto.ClientIddto;
+import com.fashionapp.fashionService.dto.ClientNoteDTO;
 import com.itextpdf.text.DocumentException;
 
 public interface ClientService 
 {
 	ResponseEntity<?> addClientDetails(ClientDto clientdto);
+	ResponseEntity<?> addClientNotes(ClientNoteDTO clientnote);
 	ResponseEntity<?> updateClientDetails(ClientDto clientdto);
 	ResponseEntity<?> deleteClientDetails(ClientIddto clientdto);
 	JSONObject getAllClientDetails();
