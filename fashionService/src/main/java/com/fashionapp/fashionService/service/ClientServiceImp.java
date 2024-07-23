@@ -25,6 +25,7 @@ import com.fashionapp.fashionService.dto.ClientNoteDTO;
 import com.fashionapp.fashionService.entity.ClientEntity;
 import com.fashionapp.fashionService.repository.ClientRepo;
 import com.fashionapp.fashionService.repository.specifications.SecurityUserSpec;
+
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -39,6 +40,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
 
 @Service
 public class ClientServiceImp implements ClientService
@@ -313,90 +315,90 @@ public class ClientServiceImp implements ClientService
 	}
 	
 	public byte[] generatePDFClientDetails(ClientIddto clientdto) throws DocumentException, IOException {
-	    try {
-	        ClientEntity client = clientrepo.findByClientEmail(clientdto.getClientEmail());
-	        if (client == null) {
-	            return null;
-	        }
+		try {
+		    ClientEntity client = clientrepo.findByClientEmail(clientdto.getClientEmail());
+		    if (client == null) {
+		        return null;
+		    }
 
-	        ByteArrayOutputStream out = new ByteArrayOutputStream();
-	        Document document = new Document(PageSize.A4, 50, 50, 50, 50);
-	        PdfWriter.getInstance(document, out);
-	        document.open();
+		    ByteArrayOutputStream out = new ByteArrayOutputStream();
+		    Document document = new Document(PageSize.A4, 50, 50, 50, 50);
+		    PdfWriter.getInstance(document, out);
+		    document.open();
 
-	        // Adding title
-	        Font titleFont = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, BaseColor.BLUE);
-	        Paragraph title = new Paragraph("Client Details", titleFont);
-	        title.setAlignment(Element.ALIGN_CENTER);
-	        document.add(title);
-	        document.add(Chunk.NEWLINE);
+		    // Adding title
+		    Font titleFont = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, BaseColor.BLUE);
+		    Paragraph title = new Paragraph("Client Details", titleFont);
+		    title.setAlignment(Element.ALIGN_CENTER);
+		    document.add(title);
+		    document.add(Chunk.NEWLINE);
 
-	        // Adding client details in a table
-	        PdfPTable table = new PdfPTable(2);
-	        table.setWidthPercentage(100);
-	        table.setSpacingBefore(10f);
-	        table.setSpacingAfter(10f);
+		    // Adding client details in a table
+		    PdfPTable table = new PdfPTable(2);
+		    table.setWidthPercentage(100);
+		    table.setSpacingBefore(10f);
+		    table.setSpacingAfter(10f);
 
-	        Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
-	        PdfPCell header;
-	        
-	        header = new PdfPCell(new Phrase("Field", headerFont));
-	        header.setBackgroundColor(BaseColor.GRAY);
-	        table.addCell(header);
-	        
-	        header = new PdfPCell(new Phrase("Details", headerFont));
-	        header.setBackgroundColor(BaseColor.GRAY);
-	        table.addCell(header);
+		    Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+		    PdfPCell header;
 
-	        // Adding client details
-	        addClientDetail(table, "Client ID:", client.getClientId().toString());
-	        addClientDetail(table, "Client Name:", client.getClientName());
-	        addClientDetail(table, "Phone Number:", client.getClientPhoneNumber());
-	        addClientDetail(table, "Gender:", client.getGender());
-	        addClientDetail(table, "Address:", client.getClientAddress());
+		    header = new PdfPCell(new Phrase("Field", headerFont));
+		    header.setBackgroundColor(BaseColor.GRAY);
+		    table.addCell(header);
 
-	        document.add(table);
+		    header = new PdfPCell(new Phrase("Details", headerFont));
+		    header.setBackgroundColor(BaseColor.GRAY);
+		    table.addCell(header);
 
-	        // Adding client profile photo
-	        Paragraph profilePhotoTitle = new Paragraph("Client Profile Photo", titleFont);
-	        profilePhotoTitle.setSpacingBefore(20f);
-	        profilePhotoTitle.setSpacingAfter(10f);
-	        document.add(profilePhotoTitle);
+		    // Adding client details
+		    addClientDetail(table, "Client ID:", client.getClientId().toString());
+		    addClientDetail(table, "Client Name:", client.getClientName());
+		    addClientDetail(table, "Phone Number:", client.getClientPhoneNumber());
+		    addClientDetail(table, "Gender:", client.getGender());
+		    addClientDetail(table, "Address:", client.getClientAddress());
 
-	        PdfPTable profilePhotoTable = new PdfPTable(1);
-	        profilePhotoTable.setWidthPercentage(100);
-	        profilePhotoTable.setSpacingBefore(10f);
-	        profilePhotoTable.setSpacingAfter(10f);
+		    document.add(table);
 
-	        addImageToTable(profilePhotoTable, client.getClientPhoto());
-	        document.add(profilePhotoTable);
+		    // Adding client profile photo
+		    Paragraph profilePhotoTitle = new Paragraph("Client Profile Photo", titleFont);
+		    profilePhotoTitle.setSpacingBefore(20f);
+		    profilePhotoTitle.setSpacingAfter(10f);
+		    document.add(profilePhotoTitle);
 
-	        // Adding flagged photos
-	        Paragraph flaggedPhotosTitle = new Paragraph("Flagged Photos", titleFont);
-	        flaggedPhotosTitle.setSpacingBefore(20f);
-	        flaggedPhotosTitle.setSpacingAfter(10f);
-	        document.add(flaggedPhotosTitle);
+		    PdfPTable profilePhotoTable = new PdfPTable(1);
+		    profilePhotoTable.setWidthPercentage(100);
+		    profilePhotoTable.setSpacingBefore(10f);
+		    profilePhotoTable.setSpacingAfter(10f);
 
-	        PdfPTable flaggedPhotosTable = new PdfPTable(3);
-	        flaggedPhotosTable.setWidthPercentage(100);
-	        flaggedPhotosTable.setSpacingBefore(10f);
-	        flaggedPhotosTable.setSpacingAfter(10f);
+		    addImageToTable(profilePhotoTable, client.getClientPhoto());
+		    document.add(profilePhotoTable);
 
-	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag1());
-	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag3());
-	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag4());
-	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag5());
-	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag6());
-	        addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag7());
+		    // Adding flagged photos
+		    Paragraph flaggedPhotosTitle = new Paragraph("Flagged Photos", titleFont);
+		    flaggedPhotosTitle.setSpacingBefore(20f);
+		    flaggedPhotosTitle.setSpacingAfter(10f);
+		    document.add(flaggedPhotosTitle);
 
-	        document.add(flaggedPhotosTable);
+		    PdfPTable flaggedPhotosTable = new PdfPTable(3);
+		    flaggedPhotosTable.setWidthPercentage(100);
+		    flaggedPhotosTable.setSpacingBefore(10f);
+		    flaggedPhotosTable.setSpacingAfter(10f);
 
-	        document.close();
-	        return out.toByteArray();
-	    } catch (Exception e) {
-	        logger.error("Error : " + e.getMessage(), e);
-	        return null;
-	    }
+		    addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag1());
+		    addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag3());
+		    addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag4());
+		    addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag5());
+		    addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag6());
+		    addImageToTable(flaggedPhotosTable, client.getClientPhotoFlag7());
+
+		    document.add(flaggedPhotosTable);
+
+		    document.close();
+		    return out.toByteArray();
+		} catch (Exception e) {
+		    logger.error("Error : " + e.getMessage(), e);
+		    return null;
+		}
 	}
 
 	private void addClientDetail(PdfPTable table, String field, String value) {
@@ -443,6 +445,7 @@ public class ClientServiceImp implements ClientService
 	        return new ResponseEntity<>("Failed to update client details: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
+    
 
 
 
